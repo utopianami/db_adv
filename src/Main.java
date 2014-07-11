@@ -28,7 +28,7 @@ public class Main {
 	static Map<String, Integer> ssnManager = new HashMap<String, Integer>();
 	static int keyFileLineNumber = 0;
 	public static long end;
-	private static int number = 1000;
+	private static int number = 10000;
 	
 	private static char getChar() {
 		int randomNum = 0;

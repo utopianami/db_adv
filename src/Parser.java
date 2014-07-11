@@ -42,7 +42,6 @@ public class Parser {
 	}
 	private void select() {
 		String value = data.split("\"")[1];
-		System.out.println(value);
 		try {
 			String result = Main.searchFile(value);
 			System.out.println("reasult : " + result);

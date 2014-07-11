@@ -19,17 +19,18 @@ public class InsertThread extends Thread{
 	@Override
 	public void run() {
 		while(true) {
+			try {
+				this.sleep(1);
+			} catch (InterruptedException e) {
+			}
 			writeDataToFile();
 		}
 	}
 
 	private void writeDataToFile() {
 		User targetUser = todoBuffer.peek();
-		
 		if (targetUser==null)
 			return;
-		System.out.println("test");
-
 		String data = 
 				targetUser.getName()
 				+ ","
@@ -42,8 +43,9 @@ public class InsertThread extends Thread{
 			Main.fileManager.writeBytes(data);
 			Main.key.writeBytes(key+"\n");
 			Main.ssnManager.put(key, Main.keyFileLineNumber);
-			System.out.println("keyLine  : "+ Main.keyFileLineNumber);
+//			System.out.println("keyLine  : "+ Main.keyFileLineNumber);
 			++Main.keyFileLineNumber;
+			Main.end = System.currentTimeMillis();
 		} catch (IOException e) {
 			//poll하지 않기
 			//TODO Error Report

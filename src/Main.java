@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.UUID;
 
 
@@ -26,6 +27,8 @@ public class Main {
 	static RandomAccessFile key;
 	static Map<String, Integer> ssnManager = new HashMap<String, Integer>();
 	static int keyFileLineNumber = 0;
+	public static long end;
+	private static int number = 1000;
 	
 	private static char getChar() {
 		int randomNum = 0;
@@ -50,12 +53,11 @@ public class Main {
 	}
 	
 	private static void insertFile() throws FileNotFoundException{
-		int number = 10000;
 		String name = null;
 		String ssn = null;
 		int phoneNumber = 0;
 		
-		for(int i = 0 ; i < number ; ++i) {
+		for(int i = 0 ; i < number  ; ++i) {
 			name = getName();
 			ssn = getUUID();
 			phoneNumber = 0;
@@ -74,7 +76,7 @@ public class Main {
 		}
 	}
 	
-	private static String searchFile(String ssn) throws IOException{
+	static String searchFile(String ssn) throws IOException{
 		int cursor;
 		cursor = ssnManager.get(ssn);
 		fileManager.seek(cursor * DATA_LENGTH);
@@ -84,9 +86,8 @@ public class Main {
 		
 	}
 	
-	public static void main(String[] args) throws IOException {
-		
-		File dbFile = new File(DATABASE_HASH_TABLE);
+	public static void main(String[] args) throws IOException, InterruptedException {
+		File dbFile = new File(DATABASE_NAME);
 		File hashFile = new File(DATABASE_HASH_TABLE);
 		
 		if (dbFile.exists()) {
@@ -99,12 +100,24 @@ public class Main {
 		
 		fileManager = new RandomAccessFile(DATABASE_NAME, "rw");
 		key = new RandomAccessFile(DATABASE_HASH_TABLE, "rw");
-		InsertThread.getInstance().start();
-		
 		setSsnManager();
+		
+		InsertThread.getInstance().start();
+		long start = System.currentTimeMillis();
 		insertFile();
-//		String ssn = "9608f808-5432-4a08-a800-2d97e934ecbd";
-//		searchFile(ssn);
+		
+		System.out.println("\n\n Welcome to the yySQL");
+		System.out.println("_________________________");
+		double time = (end-start)/1000.0;
+		System.out.println("Query OK, " + number + " rows affected (" + time + "sec)\n");
+		while(true){
+			Scanner scan = new Scanner(System.in);
+			System.out.print("\nyySQL>  ");
+			String data = scan.nextLine();
+			
+			Parser parser = new Parser(data);
+			parser.execute();
+		}
 		
 	}
 

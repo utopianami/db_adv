@@ -17,7 +17,7 @@ public class Parser {
 		this.type = data.split(" ")[0];
 	}
 	
-	public void execute(){
+	public boolean execute(){
 		try {
 			long startExecute = System.currentTimeMillis();
 			long endExecute;
@@ -33,12 +33,16 @@ public class Parser {
 				endExecute = System.currentTimeMillis();
 				double time = (endExecute - startExecute)/1000.0;
 				System.out.println("Query OK, 1 rows affected (" + time + "sec)\n");
+			}else if (this.data.equalsIgnoreCase("EXIT")) {
+				return false;
 			}else{
 				System.out.println("ERROR : You have an error in your SQL syntax; check the manual");
 			}
 		} catch (Exception e) {
 			System.out.println("ERROR : You have an error in your SQL syntax; check the manual");
 		}
+		
+		return true;
 	}
 	private void select() {
 		String value = data.split("\"")[1];
@@ -58,5 +62,4 @@ public class Parser {
 		ThreadHandler handler = new ThreadHandler(new User(Main.keyFileLineNumber, name, ssn, phoneNumber));
 		handler.start();
 	}
-
 }
